@@ -1,0 +1,1023 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #0f0f1a;
+    --surface2: #141422;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #6c47ff;
+    --accent2: #a78bfa;
+    --green: #00e5a0;
+    --amber: #f59e0b;
+    --red: #f43f5e;
+    --cyan: #22d3ee;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: var(--font-head); min-height: 100vh; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 56px 1fr;
+    min-height: 100vh;
+    background: var(--bg);
+  }
+
+  /* TOP BAR */
+  .topbar {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+    position: relative;
+  }
+
+  .logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.5; transform:scale(0.8); }
+  }
+
+  .topbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .status-pill {
+    background: rgba(0, 229, 160, 0.08);
+    border: 1px solid rgba(0, 229, 160, 0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .time-display {
+    color: var(--accent2);
+    font-size: 11px;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .nav-section {
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+
+  .nav-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 4px 8px 8px;
+    font-family: var(--font-mono);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--muted);
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+  .nav-item.active {
+    background: rgba(108, 71, 255, 0.12);
+    color: var(--accent2);
+  }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 4px; bottom: 4px;
+    width: 2px;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .nav-icon { font-size: 14px; width: 16px; text-align: center; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--accent);
+    color: white;
+    font-size: 9px;
+    font-family: var(--font-mono);
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .nav-badge.amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+  /* MAIN */
+  .main {
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--bg);
+  }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .page-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .page-sub { font-size: 11px; color: var(--muted); font-family: var(--font-mono); margin-top: 2px; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { background: #7c5dfa; transform: translateY(-1px); }
+
+  /* METRIC CARDS */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+  }
+
+  .metric-card.green::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+  .metric-card.purple::before { background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+  .metric-card.amber::before { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+  .metric-card.cyan::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+
+  .metric-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-mono);
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-value.green { color: var(--green); }
+  .metric-value.purple { color: var(--accent2); }
+  .metric-value.amber { color: var(--amber); }
+  .metric-value.cyan { color: var(--cyan); }
+
+  .metric-delta {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .metric-delta.down { color: var(--red); }
+
+  /* MAIN GRID */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title-icon {
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+  }
+  .card-title-icon.purple { background: rgba(108,71,255,0.15); color: var(--accent2); }
+  .card-title-icon.green { background: rgba(0,229,160,0.1); color: var(--green); }
+  .card-title-icon.amber { background: rgba(245,158,11,0.1); color: var(--amber); }
+
+  .card-action {
+    font-size: 10px;
+    color: var(--accent2);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    padding: 4px 8px;
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 6px;
+    background: rgba(108,71,255,0.05);
+    transition: all 0.15s;
+  }
+  .card-action:hover { background: rgba(108,71,255,0.1); }
+
+  /* HUNT MAP */
+  .hunt-map {
+    padding: 16px;
+    position: relative;
+    height: 220px;
+  }
+
+  .hunt-map canvas { width: 100%; height: 100%; }
+
+  .map-legend {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+    font-family: var(--font-mono);
+    color: var(--muted);
+  }
+
+  .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* PROSPECTS TABLE */
+  .prospects-list { padding: 0; }
+
+  .prospect-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .prospect-row:hover { background: var(--surface2); }
+  .prospect-row:last-child { border-bottom: none; }
+
+  .prospect-avatar {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .prospect-info { flex: 1; min-width: 0; }
+
+  .prospect-name {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prospect-platform {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 1px;
+  }
+
+  .prospect-score {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .score-bar-bg {
+    width: 60px; height: 3px;
+    background: var(--border2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .score-bar { height: 100%; border-radius: 2px; transition: width 0.5s; }
+
+  .score-val { font-size: 10px; font-family: var(--font-mono); color: var(--accent2); }
+
+  .prospect-action {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    background: rgba(108,71,255,0.1);
+    border: 1px solid rgba(108,71,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    flex-shrink: 0;
+    color: var(--accent2);
+    transition: all 0.15s;
+  }
+  .prospect-action:hover { background: rgba(108,71,255,0.2); }
+
+  /* AGENT ACTIVITY */
+  .agent-panel { display: flex; flex-direction: column; gap: 0; }
+
+  .agent-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .agent-item:last-child { border-bottom: none; }
+
+  .agent-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .agent-info { flex: 1; }
+  .agent-name { font-size: 11px; font-weight: 600; }
+  .agent-task { font-size: 10px; color: var(--muted); font-family: var(--font-mono); margin-top: 1px; }
+
+  .agent-status {
+    font-size: 9px;
+    font-family: var(--font-mono);
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .agent-status.running {
+    background: rgba(0,229,160,0.08);
+    color: var(--green);
+    border: 1px solid rgba(0,229,160,0.2);
+  }
+
+  .agent-status.idle {
+    background: rgba(107,107,128,0.1);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .agent-status.busy {
+    background: rgba(108,71,255,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(108,71,255,0.2);
+  }
+
+  /* ROI CHART */
+  .roi-chart-area { padding: 16px; }
+  .roi-chart-area canvas { width: 100%; }
+
+  /* BOTTOM GRID */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* Message preview */
+  .msg-preview {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 16px;
+    position: relative;
+  }
+
+  .msg-header {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .msg-text {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text);
+    opacity: 0.9;
+  }
+
+  .msg-actions {
+    display: flex;
+    gap: 6px;
+    margin: 8px 16px 12px;
+  }
+
+  .msg-btn {
+    flex: 1;
+    padding: 7px 12px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .msg-btn.approve {
+    background: rgba(0,229,160,0.1);
+    color: var(--green);
+    border: 1px solid rgba(0,229,160,0.25);
+  }
+  .msg-btn.approve:hover { background: rgba(0,229,160,0.2); }
+
+  .msg-btn.edit {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+  }
+  .msg-btn.edit:hover { color: var(--text); border-color: var(--border2); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  @keyframes scan-line {
+    0% { transform: translateY(-100%); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(100%); opacity: 0; }
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scan-line 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+</style>
+
+<div class="shell">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      NEXUS<span style="color:var(--accent2)">·AI</span>
+    </div>
+    <div class="topbar-center">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        4 agents actifs · 247 prospects en cours
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span>Store:</span>
+      <span style="color:var(--text)">sneaklab.myshopify.com</span>
+      <span class="time-display" id="clock">--:--:--</span>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="nav-section">
+      <div class="nav-label">Core</div>
+      <div class="nav-item active">
+        <span class="nav-icon"><i class="ti ti-layout-dashboard" aria-hidden="true"></i></span>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><i class="ti ti-crosshair" aria-hidden="true"></i></span>
+        Hunter
+        <span class="nav-badge">12</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><i class="ti ti-users" aria-hidden="true"></i></span>
+        Prospects
+        <span class="nav-badge amber">5</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><i class="ti ti-message-circle" aria-hidden="true"></i></span>
+        Messages
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Shopify</div>
+      <div class="nav-item">
+        <span class="nav-icon"><i class="ti ti-package" aria-hidden="true"></i></span>
+        Inventaire
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><i class="ti ti-headset" aria-hidden="true"></i></span>
+        SAV IA
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><i class="ti ti-chart-line" aria-hidden="true"></i></span>
+        Analytics
+      </div>
+    </div>
+    <div class="nav-section" style="margin-top:auto">
+      <div class="nav-item">
+        <span class="nav-icon"><i class="ti ti-settings" aria-hidden="true"></i></span>
+        Config
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Command Center</div>
+        <div class="page-sub">13 MAI 2026 · HUNT SESSION #47</div>
+      </div>
+      <button class="btn-primary" onclick="triggerHunt()">
+        <i class="ti ti-player-play" aria-hidden="true"></i>
+        Lancer une chasse
+      </button>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-row">
+      <div class="metric-card green">
+        <div class="metric-label">ROI Généré / IA</div>
+        <div class="metric-value green" id="roi-val">€2,847</div>
+        <div class="metric-delta">↑ +€340 aujourd'hui</div>
+      </div>
+      <div class="metric-card purple">
+        <div class="metric-label">Prospects identifiés</div>
+        <div class="metric-value purple" id="prospect-count">1,247</div>
+        <div class="metric-delta">↑ +89 cette heure</div>
+      </div>
+      <div class="metric-card amber">
+        <div class="metric-label">Taux de conversion</div>
+        <div class="metric-value amber">8.4%</div>
+        <div class="metric-delta">↑ vs 2.1% moyen</div>
+      </div>
+      <div class="metric-card cyan">
+        <div class="metric-label">Messages envoyés</div>
+        <div class="metric-value cyan" id="msg-count">342</div>
+        <div class="metric-delta">↑ 12 en attente</div>
+      </div>
+    </div>
+
+    <!-- CONTENT GRID -->
+    <div class="content-grid">
+      <!-- LEFT COLUMN -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- HUNT MAP -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon purple"><i class="ti ti-radar" aria-hidden="true"></i></div>
+              Carte de Chasse en Temps Réel
+            </div>
+            <div class="card-action">LIVE</div>
+          </div>
+          <div class="hunt-map" style="position:relative;">
+            <div class="scan-line"></div>
+            <canvas id="mapCanvas" height="180"></canvas>
+            <div class="map-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Reddit</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div> TikTok</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Google</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Instagram</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROI CHART -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon green"><i class="ti ti-trending-up" aria-hidden="true"></i></div>
+              ROI Généré par l'IA — 7 derniers jours
+            </div>
+          </div>
+          <div class="roi-chart-area">
+            <canvas id="roiCanvas" height="110"></canvas>
+          </div>
+        </div>
+
+        <!-- PENDING MESSAGES -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon amber"><i class="ti ti-mail" aria-hidden="true"></i></div>
+              Message en attente d'approbation
+            </div>
+            <div style="font-size:10px;color:var(--amber);font-family:var(--font-mono);">5 pending</div>
+          </div>
+          <div class="msg-preview">
+            <div class="msg-header">
+              <span>→ u/sneakerhead_paris · Reddit · Score: 0.91</span>
+              <span style="color:var(--accent2)">Air Max 95</span>
+            </div>
+            <div class="msg-text" id="msg-preview-text">
+              "Hey, j'ai vu ton post sur les Air Max 95 OG — t'as l'œil 👀 On a justement rentré du stock limité coloris Neon Yellow, taille 42-44. Je te réserve 48h si t'es chaud ?"
+            </div>
+          </div>
+          <div class="msg-actions">
+            <div class="msg-btn approve" onclick="approveMsg()">✓ Approuver & Envoyer</div>
+            <div class="msg-btn edit">✎ Modifier</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- AGENTS -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon purple"><i class="ti ti-robot" aria-hidden="true"></i></div>
+              Agents IA
+            </div>
+          </div>
+          <div class="agent-panel">
+            <div class="agent-item">
+              <div class="agent-icon" style="background:rgba(108,71,255,0.1);color:var(--accent2)"><i class="ti ti-crosshair" aria-hidden="true"></i></div>
+              <div class="agent-info">
+                <div class="agent-name">Hunter Agent</div>
+                <div class="agent-task" id="hunter-task">Scan Reddit r/Sneakers…</div>
+              </div>
+              <div class="agent-status running">● running</div>
+            </div>
+            <div class="agent-item">
+              <div class="agent-icon" style="background:rgba(34,211,238,0.1);color:var(--cyan)"><i class="ti ti-user-search" aria-hidden="true"></i></div>
+              <div class="agent-info">
+                <div class="agent-name">Profiler Agent</div>
+                <div class="agent-task" id="profiler-task">Analyse 12 profils…</div>
+              </div>
+              <div class="agent-status running">● running</div>
+            </div>
+            <div class="agent-item">
+              <div class="agent-icon" style="background:rgba(0,229,160,0.1);color:var(--green)"><i class="ti ti-pencil" aria-hidden="true"></i></div>
+              <div class="agent-info">
+                <div class="agent-name">Writer Agent</div>
+                <div class="agent-task" id="writer-task">Rédige DM × 3…</div>
+              </div>
+              <div class="agent-status busy">◈ busy</div>
+            </div>
+            <div class="agent-item">
+              <div class="agent-icon" style="background:rgba(245,158,11,0.1);color:var(--amber)"><i class="ti ti-shopping-cart" aria-hidden="true"></i></div>
+              <div class="agent-info">
+                <div class="agent-name">Manager Agent</div>
+                <div class="agent-task">Sync Shopify inventory</div>
+              </div>
+              <div class="agent-status idle">○ idle</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP PROSPECTS -->
+        <div class="card" style="flex:1">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-title-icon green"><i class="ti ti-flame" aria-hidden="true"></i></div>
+              Top Prospects · Session
+            </div>
+            <div class="card-action">Voir tout</div>
+          </div>
+          <div class="prospects-list" id="prospects-list"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// CLOCK
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toTimeString().split(' ')[0];
+}
+updateClock(); setInterval(updateClock, 1000);
+
+// PROSPECTS DATA
+const prospects = [
+  { name: "sneakerhead_paris", platform: "Reddit", score: 0.91, color: "#6c47ff", intent: "Air Max 95" },
+  { name: "@jordan.collector", platform: "TikTok", score: 0.87, color: "#22d3ee", intent: "Jordan 1 Retro" },
+  { name: "KicksForum_ML", platform: "Google", score: 0.84, color: "#f59e0b", intent: "Yeezy Slide" },
+  { name: "@baskets_addict", platform: "Instagram", score: 0.82, color: "#00e5a0", intent: "New Balance 550" },
+  { name: "user_r8xKL2", platform: "Reddit", score: 0.79, color: "#6c47ff", intent: "Nike Dunk Low" },
+];
+
+function renderProspects() {
+  const container = document.getElementById('prospects-list');
+  container.innerHTML = prospects.map((p, i) => {
+    const initials = p.name.replace(/[^a-zA-Z]/g, '').slice(0,2).toUpperCase() || 'XX';
+    const colors = ['rgba(108,71,255,0.15)', 'rgba(34,211,238,0.15)', 'rgba(245,158,11,0.15)', 'rgba(0,229,160,0.15)', 'rgba(108,71,255,0.1)'];
+    const barColor = p.score > 0.88 ? '#00e5a0' : p.score > 0.82 ? '#a78bfa' : '#f59e0b';
+    return `<div class="prospect-row">
+      <div class="prospect-avatar" style="background:${colors[i]};color:${p.color}">${initials}</div>
+      <div class="prospect-info">
+        <div class="prospect-name">${p.name}</div>
+        <div class="prospect-platform">${p.platform} · ${p.intent}</div>
+      </div>
+      <div class="prospect-score">
+        <div class="score-val">${p.score}</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:${p.score*100}%;background:${barColor}"></div></div>
+      </div>
+      <div class="prospect-action"><i class="ti ti-send" aria-hidden="true"></i></div>
+    </div>`;
+  }).join('');
+}
+renderProspects();
+
+// HUNT MAP CANVAS
+const mapCanvas = document.getElementById('mapCanvas');
+const mCtx = mapCanvas.getContext('2d');
+let mapParticles = [];
+
+function resizeMap() {
+  mapCanvas.width = mapCanvas.offsetWidth || 400;
+  mapCanvas.height = 180;
+}
+resizeMap();
+
+const colors = ['#6c47ff','#22d3ee','#f59e0b','#00e5a0'];
+const platforms = ['Reddit','TikTok','Google','Instagram'];
+
+for (let i = 0; i < 60; i++) {
+  mapParticles.push({
+    x: Math.random() * (mapCanvas.width || 400),
+    y: Math.random() * 160 + 10,
+    r: Math.random() * 3 + 1,
+    color: colors[Math.floor(Math.random()*4)],
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.2,
+    alpha: Math.random() * 0.7 + 0.3,
+    pulse: Math.random() * Math.PI * 2,
+  });
+}
+
+function animateMap() {
+  const w = mapCanvas.width || 400;
+  const h = 180;
+  mCtx.clearRect(0, 0, w, h);
+
+  // grid lines
+  mCtx.strokeStyle = 'rgba(255,255,255,0.03)';
+  mCtx.lineWidth = 0.5;
+  for (let x = 0; x < w; x += 40) {
+    mCtx.beginPath(); mCtx.moveTo(x,0); mCtx.lineTo(x,h); mCtx.stroke();
+  }
+  for (let y = 0; y < h; y += 30) {
+    mCtx.beginPath(); mCtx.moveTo(0,y); mCtx.lineTo(w,y); mCtx.stroke();
+  }
+
+  mapParticles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    p.pulse += 0.05;
+    if (p.x < 0 || p.x > w) p.vx *= -1;
+    if (p.y < 10 || p.y > h-10) p.vy *= -1;
+
+    const glow = Math.sin(p.pulse) * 0.3 + 0.7;
+    mCtx.beginPath();
+    mCtx.arc(p.x, p.y, p.r * glow, 0, Math.PI*2);
+    mCtx.fillStyle = p.color + Math.floor(p.alpha * 255).toString(16).padStart(2,'0');
+    mCtx.fill();
+
+    // ping ring on some
+    if (Math.sin(p.pulse * 0.7) > 0.9) {
+      mCtx.beginPath();
+      mCtx.arc(p.x, p.y, p.r * 3, 0, Math.PI*2);
+      mCtx.strokeStyle = p.color + '30';
+      mCtx.lineWidth = 0.5;
+      mCtx.stroke();
+    }
+  });
+
+  // Occasionally add new particle
+  if (Math.random() < 0.03 && mapParticles.length < 80) {
+    mapParticles.push({
+      x: Math.random() * w, y: Math.random() * 160 + 10,
+      r: Math.random() * 3 + 1,
+      color: colors[Math.floor(Math.random()*4)],
+      vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.2,
+      alpha: 0.1, pulse: 0,
+    });
+  }
+
+  requestAnimationFrame(animateMap);
+}
+animateMap();
+
+// ROI CHART
+const roiCtx = document.getElementById('roiCanvas').getContext('2d');
+const roiDays = ['L 7','L 6','L 5','L 4','L 3','H 2','H 1','Auj'];
+const roiData = [310, 480, 720, 650, 890, 1100, 1340, 1550];
+
+new Chart(roiCtx, {
+  type: 'line',
+  data: {
+    labels: roiDays,
+    datasets: [{
+      data: roiData,
+      borderColor: '#6c47ff',
+      borderWidth: 2,
+      backgroundColor: (ctx) => {
+        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 110);
+        gradient.addColorStop(0, 'rgba(108,71,255,0.25)');
+        gradient.addColorStop(1, 'rgba(108,71,255,0.02)');
+        return gradient;
+      },
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: '#a78bfa',
+      pointBorderColor: '#0f0f1a',
+      pointBorderWidth: 2,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: {
+      backgroundColor: '#141422',
+      borderColor: 'rgba(108,71,255,0.3)',
+      borderWidth: 1,
+      titleColor: '#a78bfa',
+      bodyColor: '#e8e8f0',
+      callbacks: { label: ctx => ` €${ctx.raw}` }
+    }},
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b6b80', font: { family: 'Space Mono', size: 9 } } },
+      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b6b80', font: { family: 'Space Mono', size: 9 }, callback: v => '€'+v } }
+    }
+  }
+});
+
+// LIVE COUNTER ANIMATION
+let roiVal = 2847, prospectCount = 1247, msgCount = 342;
+
+setInterval(() => {
+  roiVal += Math.floor(Math.random() * 8);
+  prospectCount += Math.floor(Math.random() * 3);
+  msgCount += Math.random() < 0.3 ? 1 : 0;
+
+  document.getElementById('roi-val').textContent = '€' + roiVal.toLocaleString();
+  document.getElementById('prospect-count').textContent = prospectCount.toLocaleString();
+  document.getElementById('msg-count').textContent = msgCount;
+}, 2500);
+
+// AGENT TASKS ROTATION
+const hunterTasks = ['Scan Reddit r/Sneakers…','Analyse TikTok #airmax…','Crawl Google "meilleur sneaker"…','Scan Instagram #kicks…'];
+const profilerTasks = ['Analyse 12 profils…','Enrichit u/jordan.collector…','Score d\'intention: 0.89…','Vérifie mémoire Pinecone…'];
+const writerTasks = ['Rédige DM × 3…','Personnalise message #5…','Génère variante B…','Optimise ton = casual…'];
+
+let taskIdx = 0;
+setInterval(() => {
+  taskIdx = (taskIdx + 1) % 4;
+  document.getElementById('hunter-task').textContent = hunterTasks[taskIdx];
+  document.getElementById('profiler-task').textContent = profilerTasks[taskIdx];
+  document.getElementById('writer-task').textContent = writerTasks[taskIdx];
+}, 3000);
+
+// ACTIONS
+function triggerHunt() {
+  const btn = document.querySelector('.btn-primary');
+  btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true" style="animation:spin 1s linear infinite"></i> Chasse en cours...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = '<i class="ti ti-player-play" aria-hidden="true"></i> Lancer une chasse';
+    btn.disabled = false;
+    prospectCount += 7;
+    document.getElementById('prospect-count').textContent = prospectCount.toLocaleString();
+  }, 3000);
+}
+
+function approveMsg() {
+  const msgs = [
+    "Vu ton post sur les Jordan 1 — on a une paire deadstock en taille 42. 48h de résa pour toi si intéressé ?",
+    "Ton commente sur les NB550 m'a frappé — exactement le coloris qu'on a en stock limité. DM si tu veux les détails ?",
+    "T'es clairement connaisseur 🔥 On a reçu du stock Yeezy Slide cette semaine. Priorité aux early adopters comme toi.",
+  ];
+  document.getElementById('msg-preview-text').textContent = msgs[Math.floor(Math.random()*msgs.length)];
+  msgCount++;
+  document.getElementById('msg-count').textContent = msgCount;
+}
+
+// Spin animation
+const style = document.createElement('style');
+style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+document.head.appendChild(style);
+</script>

@@ -1,34 +1,14 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 import os
 
 app = FastAPI()
 
-# Configuration de tes paiements (Mobile et Carte Visa)
-PAYMENT_METHODS = "Moov: +235 93643188 | Airtel: +235 64107740 | Visa: 4646 6384 1124 8965"
-FREE_LIMIT = 4
-
-user_usage = {}
-
-@app.get("/")
-def home():
-    return {"message": "Nexus Agent IA - Global Content Strategy", "status": "Online"}
-
-@app.get("/search")
-def search(user_id: str, query: str):
-    count = user_usage.get(user_id, 0)
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    # Ce code dit au Cloud d'afficher ton interface visuelle
+    if os.path.exists("nexus_agent_dashboard.html"):
+        with open("nexus_agent_dashboard.html", "r", encoding="utf-8") as f:
+            return f.read()
+    return "<h1>Erreur : Fichier interface non trouvé sur le Cloud</h1>"
     
-    if count >= FREE_LIMIT:
-        return {
-            "blocked": True,
-            "message": f"🔒 Limite gratuite atteinte ({FREE_LIMIT} recherches).",
-            "instruction": "Pour débloquer l'accès illimité, envoyez votre paiement via Moov, Airtel ou Carte Visa :",
-            "contacts": PAYMENT_METHODS
-        }
-    
-    user_usage[user_id] = count + 1
-    
-    return {
-        "blocked": False,
-        "results": f"Analyse stratégique pour : '{query}'",
-        "remaining_free": FREE_LIMIT - (count + 1)
-    }

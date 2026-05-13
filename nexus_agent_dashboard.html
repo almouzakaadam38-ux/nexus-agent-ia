@@ -1,81 +1,38 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Command - Validation Live</title>
-    <style>
-        body { background: #0a0a0f; color: #e8e8f0; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        .navbar { background: #141422; padding: 15px; border-bottom: 2px solid #6c47ff; }
-        .container { padding: 40px 20px; }
-        .card { background: #141422; padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; max-width: 450px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        .btn-activate { background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
-        input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; }
-
-        /* Écran de vérification finale */
-        #waitingScreen { display: none; margin-top: 20px; }
-        .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: #6c47ff; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #timer { color: #ff4d4d; font-weight: bold; font-size: 1.5rem; margin-top: 10px; }
-    </style>
-</head>
-<body>
-
-    <div class="navbar">
-        <div style="font-weight:bold; color:#6c47ff;">NEXUS COMMAND</div>
+<div id="sectionAnalyse" style="display:none; margin-top:30px; text-align:left; background:#1c1c2e; padding:20px; border-radius:15px; border: 1px solid #6c47ff;">
+    <h3 style="color:#6c47ff; margin-top:0;">🤖 Analyseur Nexus IA v3.0</h3>
+    <p style="font-size:0.8rem; color:#94a3b8;">Statut : <span style="color:#10b981;">Prêt à analyser</span></p>
+    
+    <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px;">
+        <label style="font-size:0.7rem; color:#6c47ff;">LIEN DE LA VIDÉO OU DU COMPTE</label>
+        <input type="text" id="urlAnalyse" placeholder="https://www.tiktok.com/@votrecompte">
+        <button class="btn-activate" style="margin-top:10px; background:#6c47ff;" onclick="demarrerAnalyseIA()">Lancer l'Analyse Expert</button>
     </div>
 
-    <div class="container">
-        <div id="mainCard" class="card">
-            <h2>Activation du Compte</h2>
-            <p style="font-size: 0.9rem; color: #94a3b8;">Entrez le code de transaction Moov ou Airtel reçu par SMS.</p>
-
-            <div id="inputBox">
-                <input type="text" id="txCode" placeholder="Ex: MP2605-XXXXX">
-                <button class="btn-activate" onclick="demarrerAttente()">VALIDER L'ACTIVATION</button>
-            </div>
-
-            <div id="waitingScreen">
-                <div class="spinner"></div>
-                <h3 style="color: #6c47ff;">Vérification en cours...</h3>
-                <p style="font-size: 0.8rem;">Un agent Nexus vérifie votre ID de transaction sur le réseau Moov/Airtel Afrique.</p>
-                <p style="font-size: 0.8rem; margin-top:15px;">Temps d'attente estimé :</p>
-                <div id="timer">15:00</div>
-                <p style="font-size: 0.7rem; color: #666; margin-top: 20px;">Veuillez ne pas actualiser la page pour ne pas perdre votre position dans la file d'attente.</p>
-            </div>
-
-            <div style="margin-top:30px; text-align:left; font-size:0.8rem; border-top: 1px solid #333; padding-top: 15px;">
-                <p>🟠 Moov : +235 93643188</p>
-                <p>🔵 Airtel : +235 64107740</p>
-            </div>
+    <div id="resultatsIA" style="display:none; margin-top:20px; border-top:1px solid #333; padding-top:15px;">
+        <p style="font-size:0.85rem;">✅ <strong>Engagement :</strong> 8.4% (Excellent)</p>
+        <p style="font-size:0.85rem;">📈 <strong>Potentiel de Croissance :</strong> +240%</p>
+        <p style="font-size:0.85rem;">💰 <strong>Estimation Revenus :</strong> 450$ - 1,200$ / mois</p>
+        <div style="background:#10b981; color:white; padding:10px; border-radius:5px; font-size:0.75rem; font-weight:bold; text-align:center;">
+            RECOMMANDATION : Publier entre 18h et 21h (GMT+1)
         </div>
     </div>
+</div>
 
-    <script>
-        function demarrerAttente() {
-            const code = document.getElementById('txCode').value;
-            if(code.trim() === "") {
-                alert("Veuillez entrer un code valide.");
-                return;
-            }
+<script>
+// Nouvelle fonction pour simuler l'IA
+function demarrerAnalyseIA() {
+    const url = document.getElementById('urlAnalyse').value;
+    if(url === "") { alert("Veuillez entrer un lien"); return; }
+    
+    alert("L'IA Nexus analyse vos algorithmes... veuillez patienter 5 secondes.");
+    setTimeout(() => {
+        document.getElementById('resultatsIA').style.display = 'block';
+    }, 5000);
+}
 
-            // Cacher la saisie, montrer l'attente
-            document.getElementById('inputBox').style.display = 'none';
-            document.getElementById('waitingScreen').style.display = 'block';
-
-            // Lancer le compte à rebours
-            let temps = 900; // 15 minutes en secondes
-            const timerElement = document.getElementById('timer');
-
-            setInterval(() => {
-                let minutes = Math.floor(temps / 60);
-                let secondes = temps % 60;
-                secondes = secondes < 10 ? '0' + secondes : secondes;
-                timerElement.innerText = minutes + ":" + secondes;
-                if (temps > 0) temps--;
-            }, 1000);
-        }
-    </script>
-</body>
-</html>
+// Modifie ta fonction d'activation pour débloquer l'analyse
+function validerFinal() {
+    // Après le paiement, on montre enfin l'IA
+    document.getElementById('sectionAnalyse').style.display = 'block';
+}
+</script>

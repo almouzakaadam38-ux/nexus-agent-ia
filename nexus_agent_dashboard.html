@@ -3,97 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Command - Espace Membre</title>
+    <title>Nexus Command - Pro</title>
     <style>
-        body { background: #0a0a0f; color: #e8e8f0; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; overflow-x: hidden; }
-        .navbar { background: #141422; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #6c47ff; }
-        .logo { font-weight: bold; color: #6c47ff; font-size: 1.4rem; }
-        
+        body { background: #0a0a0f; color: #e8e8f0; font-family: sans-serif; margin: 0; text-align: center; }
+        .navbar { background: #141422; padding: 15px; display: flex; justify-content: space-between; border-bottom: 2px solid #6c47ff; }
         .container { padding: 40px 20px; }
-        .card { background: #141422; padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; max-width: 450px; width: 100%; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        .card { background: #141422; padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; max-width: 450px; width: 100%; }
         
-        /* Boutons */
-        .btn-main { background: #6c47ff; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem; margin-top: 20px; }
-        .btn-activate { background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; margin-top: 20px; animation: pulse 2s infinite; }
+        .btn-activate { background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        /* Barre de chargement */
+        #loader { display: none; margin-top: 20px; }
+        .progress-bar { background: #333; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { background: #6c47ff; height: 100%; width: 0%; transition: width 3s; }
 
-        /* Fenêtre Inscription */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 100; }
-        .modal-content { background: #1c1c2e; padding: 30px; border-radius: 15px; width: 320px; text-align: left; border: 1px solid #6c47ff; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #0a0a0f; color: white; box-sizing: border-box; }
-
-        /* Sections cachées au début */
-        #espaceMembre { display: none; }
-        .stats-box { display: flex; justify-content: space-around; margin-top: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; }
-        .stat-item { color: #6c47ff; font-weight: bold; font-size: 1.2rem; }
+        /* Formulaire de transaction */
+        #transactionBox { display: none; margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px dashed #6c47ff; }
+        input { width: 90%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #333; background: #000; color: white; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <div class="logo">NEXUS COMMAND</div>
-        <div id="navUser" style="display:none; color: #10b981;">● Compte Client Actif</div>
+        <div style="font-weight:bold; color:#6c47ff;">NEXUS COMMAND</div>
+        <div id="status" style="color:#10b981;">● Connecté</div>
     </div>
 
     <div class="container">
-        <div id="pageAccueil" class="card">
-            <h1>Nexus IA</h1>
-            <p>Monétisez votre contenu comme un pro.</p>
-            <button class="btn-main" onclick="ouvrirInscription()">S'inscrire pour commencer</button>
-        </div>
-
-        <div id="espaceMembre" class="card">
-            <h2 style="color: #6c47ff;">Tableau de Bord</h2>
-            <p>Bienvenue ! Voici vos statistiques actuelles :</p>
-            <div class="stats-box">
-                <div>Vues<br><span class="stat-item">0</span></div>
-                <div>Revenus<br><span class="stat-item">0.00$</span></div>
+        <div class="card">
+            <h2 id="title">Tableau de Bord</h2>
+            <div id="stats">
+                <p>Vues : <strong>0</strong> | Revenus : <strong>0.00$</strong></p>
+                <div style="background:rgba(255,0,0,0.1); color:#ff4d4d; padding:10px; border-radius:5px; font-size:13px;">Compte Non Activé</div>
             </div>
-            <div style="background: rgba(255,165,0,0.1); border: 1px solid orange; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: left;">
-                <p style="color: orange; font-weight: bold; margin: 0;">⚠️ Action Requise</p>
-                <p style="font-size: 0.85rem;">Votre compte n'est pas encore activé. Pour voir vos revenus réels et booster vos vidéos, activez votre licence.</p>
-            </div>
-            
-            <button class="btn-activate" onclick="alert('Envoyez votre preuve de paiement (Moov/Airtel) à l\'administrateur pour activer.')">
-                ACTIVER MON COMPTE MAINTENANT
-            </button>
 
-            <div style="margin-top:20px; font-size: 0.9rem; text-align: left;">
-                <div style="color:#6c47ff; font-weight:bold;">Moyens de paiement :</div>
-                <div>🟠 Moov : +235 93643188</div>
-                <div>🔵 Airtel : +235 64107740</div>
-                <div style="color:#10b981;">🟢 Compte Bancaire : Disponible</div>
-            </div>
-        </div>
-    </div>
+            <button id="btnMain" class="btn-activate" onclick="lancerVerif()">ACTIVER AVEC MOOV / AIRTEL / BANQUE</button>
 
-    <div id="modalInscription" class="modal">
-        <div class="modal-content">
-            <h2>Créer un compte</h2>
-            <input type="text" id="userName" placeholder="Nom complet">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Mot de passe">
-            <button class="btn-main" onclick="validerInscription()">Créer mon accès</button>
-            <p onclick="fermerInscription()" style="text-align:center; cursor:pointer; color:#666; font-size:0.8rem;">Annuler</p>
+            <div id="loader">
+                <p>Connexion au réseau bancaire...</p>
+                <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
+            </div>
+
+            <div id="transactionBox">
+                <p style="font-size:14px;">Entrez l'ID de transaction ou le numéro de virement :</p>
+                <input type="text" id="txId" placeholder="Ex: TXN-994821">
+                <button class="btn-activate" style="padding:10px;" onclick="final()">Valider la transaction</button>
+            </div>
+
+            <div style="margin-top:20px; text-align:left; font-size:13px;">
+                <p>Moov : +235 93643188</p>
+                <p>Airtel : +235 64107740</p>
+                <p style="color:#10b981;">Banque : Virement disponible</p>
+            </div>
         </div>
     </div>
 
     <script>
-        function ouvrirInscription() { document.getElementById('modalInscription').style.display = 'flex'; }
-        function fermerInscription() { document.getElementById('modalInscription').style.display = 'none'; }
-
-        function validerInscription() {
-            const name = document.getElementById('userName').value || "Utilisateur";
-            alert('Félicitations ' + name + ' ! Votre compte est créé. Vous allez être redirigé vers votre espace membre.');
+        function lancerVerif() {
+            document.getElementById('btnMain').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+            setTimeout(() => { document.getElementById('fill').style.width = '100%'; }, 100);
             
-            // Le secret est ici : on cache l'accueil et on montre l'espace membre
-            document.getElementById('modalInscription').style.display = 'none';
-            document.getElementById('pageAccueil').style.display = 'none';
-            document.getElementById('espaceMembre').style.display = 'inline-block';
-            document.getElementById('navUser').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('transactionBox').style.display = 'block';
+            }, 3500);
+        }
+
+        function final() {
+            alert("Vérification en cours... Un agent Nexus va valider votre ID sous 15 minutes. Vous recevrez une notification sur votre compte.");
+            location.reload(); // Recommence pour le test
         }
     </script>
-
 </body>
 </html>
+

@@ -3,57 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Command - Pro</title>
+    <title>Nexus Command - Validation Pro</title>
     <style>
-        body { background: #0a0a0f; color: #e8e8f0; font-family: sans-serif; margin: 0; text-align: center; }
+        body { background: #0a0a0f; color: #e8e8f0; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
         .navbar { background: #141422; padding: 15px; display: flex; justify-content: space-between; border-bottom: 2px solid #6c47ff; }
         .container { padding: 40px 20px; }
-        .card { background: #141422; padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; max-width: 450px; width: 100%; }
+        .card { background: #141422; padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; max-width: 450px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        .btn-activate { background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        .btn-activate { background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; font-size: 1rem; }
         
-        /* Barre de chargement */
         #loader { display: none; margin-top: 20px; }
-        .progress-bar { background: #333; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-bar { background: #333; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .progress-fill { background: #6c47ff; height: 100%; width: 0%; transition: width 3s; }
 
-        /* Formulaire de transaction */
-        #transactionBox { display: none; margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px dashed #6c47ff; }
-        input { width: 90%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #333; background: #000; color: white; }
+        #transactionBox { display: none; margin-top: 20px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px dashed #6c47ff; }
+        input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; }
+        label { font-size: 0.8rem; color: #94a3b8; display: block; text-align: left; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <div style="font-weight:bold; color:#6c47ff;">NEXUS COMMAND</div>
-        <div id="status" style="color:#10b981;">● Connecté</div>
+        <div style="font-weight:bold; color:#6c47ff; letter-spacing:1px;">NEXUS COMMAND</div>
+        <div style="color:#10b981; font-size: 0.9rem;">● Système Actif</div>
     </div>
 
     <div class="container">
         <div class="card">
-            <h2 id="title">Tableau de Bord</h2>
-            <div id="stats">
-                <p>Vues : <strong>0</strong> | Revenus : <strong>0.00$</strong></p>
-                <div style="background:rgba(255,0,0,0.1); color:#ff4d4d; padding:10px; border-radius:5px; font-size:13px;">Compte Non Activé</div>
-            </div>
+            <h2>Espace Membre</h2>
+            <p style="font-size: 0.9rem; color: #94a3b8;">Statut : <span style="color:#ff4d4d;">En attente d'activation</span></p>
 
-            <button id="btnMain" class="btn-activate" onclick="lancerVerif()">ACTIVER AVEC MOOV / AIRTEL / BANQUE</button>
+            <button id="btnMain" class="btn-activate" onclick="lancerVerif()">ACTIVER MON COMPTE MAINTENANT</button>
 
             <div id="loader">
-                <p>Connexion au réseau bancaire...</p>
+                <p style="font-size: 0.9rem;">Analyse des transactions réseau...</p>
                 <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
             </div>
 
             <div id="transactionBox">
-                <p style="font-size:14px;">Entrez l'ID de transaction ou le numéro de virement :</p>
-                <input type="text" id="txId" placeholder="Ex: TXN-994821">
-                <button class="btn-activate" style="padding:10px;" onclick="final()">Valider la transaction</button>
+                <label>Numéro de transaction (reçu par SMS)</label>
+                <input type="text" id="txId" placeholder="Ex: MP2605.1234.C5678">
+                <button class="btn-activate" style="background:#6c47ff;" onclick="envoyerWhatsApp()">VALIDER SUR LE RÉSEAU</button>
             </div>
 
-            <div style="margin-top:20px; text-align:left; font-size:13px;">
-                <p>Moov : +235 93643188</p>
-                <p>Airtel : +235 64107740</p>
-                <p style="color:#10b981;">Banque : Virement disponible</p>
+            <div style="margin-top:30px; text-align:left; font-size:0.85rem; border-top: 1px solid #333; padding-top: 20px;">
+                <p>🟠 <strong>Moov :</strong> +235 93643188</p>
+                <p>🔵 <strong>Airtel :</strong> +235 64107740</p>
+                <p style="color:#10b981;">🟢 <strong>Visa/Banque :</strong> Disponible</p>
             </div>
         </div>
     </div>
@@ -70,11 +66,13 @@
             }, 3500);
         }
 
-        function final() {
-            alert("Vérification en cours... Un agent Nexus va valider votre ID sous 15 minutes. Vous recevrez une notification sur votre compte.");
-            location.reload(); // Recommence pour le test
-        }
-    </script>
-</body>
-</html>
-
+        function envoyerWhatsApp() {
+            const code = document.getElementById('txId').value;
+            if(code.trim() === "") {
+                alert("Veuillez entrer votre numéro de transaction.");
+                return;
+            }
+            
+            // TON NUMÉRO WHATSAPP ICI
+            const monNumero = "23593643188"; 
+            const texte = "Bonjour Nexus, voici mon code de transaction pour activer mon

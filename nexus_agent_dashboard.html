@@ -2,74 +2,38 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Agent IA - Platform</title>
+    <title>Nexus Agent IA - Dashboard</title>
     <style>
-        body { background: #0a0a0f; color: #e8e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        
-        /* Barre de navigation */
-        .navbar { background: #141422; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .logo { font-weight: bold; font-size: 1.5rem; color: #6c47ff; }
-        .nav-links button { background: transparent; border: 1px solid #6c47ff; color: #6c47ff; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-left: 10px; transition: 0.3s; }
-        .nav-links button:hover { background: #6c47ff; color: white; }
-
-        /* Conteneur principal */
-        .container { text-align: center; padding: 60px 20px; }
-        .card { background: #141422; border: 1px solid rgba(255,255,255,0.1); padding: 40px; border-radius: 20px; display: inline-block; max-width: 500px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        h1 { margin-top: 0; color: #fff; }
-        p { color: #94a3b8; line-height: 1.6; }
-
-        .btn-main { background: #6c47ff; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-main:hover { background: #5535d4; transform: translateY(-2px); }
-
-        /* Section Paiement */
-        .payment-methods { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: left; }
-        .payment-title { font-size: 0.9rem; color: #6c47ff; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
-        .method { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 5px; }
-        .bank-option { border-left: 3px solid #10b981; } /* Vert pour la banque */
+        body { background: #0a0a0f; color: #e8e8f0; font-family: sans-serif; margin: 0; text-align: center; }
+        .navbar { background: #141422; padding: 15px; display: flex; justify-content: space-around; border-bottom: 1px solid #6c47ff; }
+        .btn-nav { background: transparent; border: 1px solid #6c47ff; color: #6c47ff; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+        .container { padding: 50px; }
+        .card { background: #141422; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; width: 350px; }
+        .btn-main { background: #6c47ff; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        .payment { margin-top: 25px; text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; }
+        .bank { color: #10b981; font-weight: bold; border-top: 1px solid #333; margin-top: 10px; padding-top: 10px; }
     </style>
 </head>
 <body>
-
     <div class="navbar">
-        <div class="logo">NEXUS AGENT</div>
-        <div class="nav-links">
-            <button onclick="alert('Fenêtre de connexion')">Se connecter</button>
-            <button onclick="alert('Création de compte en cours...')">S'inscrire</button>
+        <div style="font-weight:bold; color:#6c47ff;">NEXUS IA</div>
+        <div>
+            <button class="btn-nav" onclick="alert('Page de connexion')">Se connecter</button>
+            <button class="btn-nav" onclick="alert('Page d\'inscription')">S'inscrire</button>
         </div>
     </div>
-
     <div class="container">
         <div class="card">
-            <h1>Expertise & Stratégie</h1>
-            <p>Propulsez votre contenu vers de nouveaux sommets. Accédez à vos statistiques et gérez vos revenus en un clic.</p>
-            
-            <button class="btn-main" onclick="alert('Veuillez vous connecter pour lancer une recherche.')">
-                Lancer une recherche IA
-            </button>
-
-            <div class="payment-methods">
-                <div class="payment-title">Moyens de paiement acceptés</div>
-                
-                <div class="method">
-                    <span>Moov Afrique</span>
-                    <strong>+235 93643188</strong>
-                </div>
-                
-                <div class="method">
-                    <span>Airtel Money</span>
-                    <strong>+235 64107740</strong>
-                </div>
-
-                <div class="method bank-option">
-                    <span>Compte Bancaire / Visa</span>
-                    <strong style="color: #10b981;">Disponible</strong>
-                </div>
-                <p style="font-size: 0.8rem; font-style: italic;">Note : Pour les virements bancaires, contactez le support après inscription.</p>
+            <h1>Nexus Command</h1>
+            <p>Monétisation & Stratégie</p>
+            <button class="btn-main" onclick="alert('Connectez-vous pour voir vos 490k vues')">Lancer la recherche</button>
+            <div class="payment">
+                <div style="color:#6c47ff; font-size:12px; margin-bottom:10px;">PAIEMENTS ACCEPTÉS</div>
+                <div>Moov : +235 93643188</div>
+                <div>Airtel : +235 64107740</div>
+                <div class="bank">✔ Compte Bancaire / Visa : Actif</div>
             </div>
         </div>
     </div>
-
 </body>
 </html>

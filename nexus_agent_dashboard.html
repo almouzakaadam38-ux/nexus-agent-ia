@@ -1,38 +1,120 @@
-<div id="sectionAnalyse" style="display:none; margin-top:30px; text-align:left; background:#1c1c2e; padding:20px; border-radius:15px; border: 1px solid #6c47ff;">
-    <h3 style="color:#6c47ff; margin-top:0;">🤖 Analyseur Nexus IA v3.0</h3>
-    <p style="font-size:0.8rem; color:#94a3b8;">Statut : <span style="color:#10b981;">Prêt à analyser</span></p>
-    
-    <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px;">
-        <label style="font-size:0.7rem; color:#6c47ff;">LIEN DE LA VIDÉO OU DU COMPTE</label>
-        <input type="text" id="urlAnalyse" placeholder="https://www.tiktok.com/@votrecompte">
-        <button class="btn-activate" style="margin-top:10px; background:#6c47ff;" onclick="demarrerAnalyseIA()">Lancer l'Analyse Expert</button>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Prospector IA - Business Finder</title>
+    <style>
+        :root { --primary: #6c47ff; --dark: #0a0a0f; --card: #141422; --success: #10b981; }
+        body { background: var(--dark); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        .app-header { background: var(--card); padding: 20px; border-bottom: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        
+        /* Formulaire de recherche */
+        .search-area { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: left; }
+        select, input { width: 100%; padding: 15px; margin: 10px 0 20px 0; border-radius: 10px; border: 1px solid #333; background: #000; color: white; font-size: 1rem; }
+        .btn-hunt { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; text-transform: uppercase; }
+
+        /* Animation de Scan */
+        #scanSection { display: none; margin: 40px 0; text-align: center; }
+        .radar { width: 80px; height: 80px; border: 4px solid var(--primary); border-radius: 50%; border-top-color: transparent; margin: 0 auto; animation: spin 1s infinite linear; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Résultats des prospects */
+        #results { display: none; }
+        .lead-card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid var(--success); position: relative; }
+        .lead-badge { background: var(--success); color: black; font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; position: absolute; right: 20px; }
+        .blur-text { filter: blur(5px); background: #333; color: transparent; border-radius: 4px; padding: 0 5px; cursor: not-allowed; }
+        
+        .btn-unlock { background: var(--success); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <div style="font-weight:900; letter-spacing:2px;">NEXUS <span style="color:var(--primary)">PROSPECTOR</span></div>
+        <div style="font-size:0.8rem; border:1px solid var(--success); padding:4px 8px; border-radius:5px; color:var(--success);">AGENT IA CONNECTÉ</div>
     </div>
 
-    <div id="resultatsIA" style="display:none; margin-top:20px; border-top:1px solid #333; padding-top:15px;">
-        <p style="font-size:0.85rem;">✅ <strong>Engagement :</strong> 8.4% (Excellent)</p>
-        <p style="font-size:0.85rem;">📈 <strong>Potentiel de Croissance :</strong> +240%</p>
-        <p style="font-size:0.85rem;">💰 <strong>Estimation Revenus :</strong> 450$ - 1,200$ / mois</p>
-        <div style="background:#10b981; color:white; padding:10px; border-radius:5px; font-size:0.75rem; font-weight:bold; text-align:center;">
-            RECOMMANDATION : Publier entre 18h et 21h (GMT+1)
+    <div class="container">
+        <div id="searchForm" class="search-area">
+            <h2 style="margin-top:0;">Générateur de Clients</h2>
+            <p style="color:#888;">Configurez votre Agent pour trouver des entreprises prêtes à payer pour vos services.</p>
+            
+            <label>QUEL EST VOTRE BUSINESS ?</label>
+            <select id="bizType">
+                <option value="shopify">Optimisation Shopify / E-commerce</option>
+                <option value="n8n">Automatisation n8n / Workflows</option>
+                <option value="agent">Vente d'Agents IA / Chatbots</option>
+                <option value="marketing">Agence Marketing Digital</option>
+            </select>
+
+            <label>ZONE DE RECHERCHE</label>
+            <input type="text" id="location" placeholder="Ex: France, Tchad, USA, Monde entier...">
+
+            <button class="btn-hunt" onclick="startScan()">Lancer la recherche de prospects</button>
+        </div>
+
+        <div id="scanSection">
+            <div class="radar"></div>
+            <h3 id="scanMsg">Connexion aux serveurs LinkedIn & Google...</h3>
+            <p style="color:#6c47ff;">L'IA analyse les entreprises sans automatisation...</p>
+        </div>
+
+        <div id="results">
+            <h2 style="text-align:left;">🎯 Prospects trouvés :</h2>
+            
+            <div class="lead-card">
+                <span class="lead-badge">CHAUD</span>
+                <div style="font-weight:bold; font-size:1.1rem;">Store Luxury Paris (E-shop)</div>
+                <div style="font-size:0.9rem; color:#94a3b8; margin: 5px 0;">Problème : Aucune IA pour répondre aux clients.</div>
+                <div style="font-size:0.8rem;">Email : <span class="blur-text">admin@luxury-store.com</span></div>
+                <div style="font-size:0.8rem;">Tel : <span class="blur-text">+33 6 45 XX XX</span></div>
+            </div>
+
+            <div class="lead-card">
+                <span class="lead-badge">CHAUD</span>
+                <div style="font-weight:bold; font-size:1.1rem;">Logistics Sahara Sarl</div>
+                <div style="font-size:0.9rem; color:#94a3b8; margin: 5px 0;">Besoin : Automatisation des factures avec n8n.</div>
+                <div style="font-size:0.8rem;">Email : <span class="blur-text">contact@sahara-log.com</span></div>
+                <div style="font-size:0.8rem;">Tel : <span class="blur-text">+235 66 XX XX XX</span></div>
+            </div>
+
+            <div style="background: rgba(108, 71, 255, 0.1); padding: 20px; border-radius: 12px; border: 1px dashed var(--primary); margin-top: 30px;">
+                <h3>🔒 18 autres clients détectés</h3>
+                <p style="font-size:0.9rem;">Pour débloquer les coordonnées complètes et les numéros directs des décideurs, activez votre licence Nexus.</p>
+                <button class="btn-unlock" onclick="alert('Redirection vers le paiement Moov/Airtel...')">ACTIVER MA LICENCE (PAIEMENT)</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-// Nouvelle fonction pour simuler l'IA
-function demarrerAnalyseIA() {
-    const url = document.getElementById('urlAnalyse').value;
-    if(url === "") { alert("Veuillez entrer un lien"); return; }
-    
-    alert("L'IA Nexus analyse vos algorithmes... veuillez patienter 5 secondes.");
-    setTimeout(() => {
-        document.getElementById('resultatsIA').style.display = 'block';
-    }, 5000);
-}
+    <script>
+        function startScan() {
+            const biz = document.getElementById('bizType').value;
+            const loc = document.getElementById('location').value;
+            if(loc === "") { alert("Précisez une zone géographique !"); return; }
 
-// Modifie ta fonction d'activation pour débloquer l'analyse
-function validerFinal() {
-    // Après le paiement, on montre enfin l'IA
-    document.getElementById('sectionAnalyse').style.display = 'block';
-}
-</script>
+            document.getElementById('searchForm').style.display = 'none';
+            document.getElementById('scanSection').style.display = 'block';
+
+            const messages = [
+                "Scan des API LinkedIn...",
+                "Détection des boutiques Shopify vulnérables...",
+                "Analyse des manques d'automatisation...",
+                "Finalisation de la liste de prospects..."
+            ];
+
+            let i = 0;
+            const stepTime = setInterval(() => {
+                document.getElementById('scanMsg').innerText = messages[i];
+                i++;
+                if(i >= messages.length) {
+                    clearInterval(stepTime);
+                    document.getElementById('scanSection').style.display = 'none';
+                    document.getElementById('results').style.display = 'block';
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

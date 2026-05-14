@@ -3,117 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Prospector IA - Business Finder</title>
+    <title>Nexus AI - Business Growth</title>
     <style>
-        :root { --primary: #6c47ff; --dark: #0a0a0f; --card: #141422; --success: #10b981; }
-        body { background: var(--dark); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-        .app-header { background: var(--card); padding: 20px; border-bottom: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
-        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        :root { --p: #6c47ff; --bg: #0a0a0f; --card: #141422; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        .nav { background: var(--card); padding: 15px; border-bottom: 2px solid var(--p); display: flex; justify-content: space-between; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
         
-        /* Formulaire de recherche */
-        .search-area { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: left; }
-        select, input { width: 100%; padding: 15px; margin: 10px 0 20px 0; border-radius: 10px; border: 1px solid #333; background: #000; color: white; font-size: 1rem; }
-        .btn-hunt { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; text-transform: uppercase; }
-
-        /* Animation de Scan */
-        #scanSection { display: none; margin: 40px 0; text-align: center; }
-        .radar { width: 80px; height: 80px; border: 4px solid var(--primary); border-radius: 50%; border-top-color: transparent; margin: 0 auto; animation: spin 1s infinite linear; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Résultats des prospects */
-        #results { display: none; }
-        .lead-card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid var(--success); position: relative; }
-        .lead-badge { background: var(--success); color: black; font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; position: absolute; right: 20px; }
-        .blur-text { filter: blur(5px); background: #333; color: transparent; border-radius: 4px; padding: 0 5px; cursor: not-allowed; }
+        /* Sections */
+        #section-auth, #section-app, #section-pay { display: none; }
+        .card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .btn-unlock { background: var(--success); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; }
+        .btn { background: var(--p); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .btn-free { background: transparent; border: 1px solid var(--p); color: var(--p); margin-top: 10px; }
+        
+        /* Demo Limits */
+        .limit-box { background: rgba(255,0,0,0.1); border: 1px solid red; padding: 10px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 20px; }
+        .blur { filter: blur(6px); user-select: none; }
     </style>
 </head>
 <body>
 
-    <div class="app-header">
-        <div style="font-weight:900; letter-spacing:2px;">NEXUS <span style="color:var(--primary)">PROSPECTOR</span></div>
-        <div style="font-size:0.8rem; border:1px solid var(--success); padding:4px 8px; border-radius:5px; color:var(--success);">AGENT IA CONNECTÉ</div>
+    <div class="nav">
+        <div style="font-weight:bold; color:var(--p)">NEXUS AI PRO</div>
+        <div id="user-tag" style="font-size:0.8rem; color:#888;">Visiteur</div>
     </div>
 
     <div class="container">
-        <div id="searchForm" class="search-area">
-            <h2 style="margin-top:0;">Générateur de Clients</h2>
-            <p style="color:#888;">Configurez votre Agent pour trouver des entreprises prêtes à payer pour vos services.</p>
-            
-            <label>QUEL EST VOTRE BUSINESS ?</label>
-            <select id="bizType">
-                <option value="shopify">Optimisation Shopify / E-commerce</option>
-                <option value="n8n">Automatisation n8n / Workflows</option>
-                <option value="agent">Vente d'Agents IA / Chatbots</option>
-                <option value="marketing">Agence Marketing Digital</option>
-            </select>
-
-            <label>ZONE DE RECHERCHE</label>
-            <input type="text" id="location" placeholder="Ex: France, Tchad, USA, Monde entier...">
-
-            <button class="btn-hunt" onclick="startScan()">Lancer la recherche de prospects</button>
-        </div>
-
-        <div id="scanSection">
-            <div class="radar"></div>
-            <h3 id="scanMsg">Connexion aux serveurs LinkedIn & Google...</h3>
-            <p style="color:#6c47ff;">L'IA analyse les entreprises sans automatisation...</p>
-        </div>
-
-        <div id="results">
-            <h2 style="text-align:left;">🎯 Prospects trouvés :</h2>
-            
-            <div class="lead-card">
-                <span class="lead-badge">CHAUD</span>
-                <div style="font-weight:bold; font-size:1.1rem;">Store Luxury Paris (E-shop)</div>
-                <div style="font-size:0.9rem; color:#94a3b8; margin: 5px 0;">Problème : Aucune IA pour répondre aux clients.</div>
-                <div style="font-size:0.8rem;">Email : <span class="blur-text">admin@luxury-store.com</span></div>
-                <div style="font-size:0.8rem;">Tel : <span class="blur-text">+33 6 45 XX XX</span></div>
-            </div>
-
-            <div class="lead-card">
-                <span class="lead-badge">CHAUD</span>
-                <div style="font-weight:bold; font-size:1.1rem;">Logistics Sahara Sarl</div>
-                <div style="font-size:0.9rem; color:#94a3b8; margin: 5px 0;">Besoin : Automatisation des factures avec n8n.</div>
-                <div style="font-size:0.8rem;">Email : <span class="blur-text">contact@sahara-log.com</span></div>
-                <div style="font-size:0.8rem;">Tel : <span class="blur-text">+235 66 XX XX XX</span></div>
-            </div>
-
-            <div style="background: rgba(108, 71, 255, 0.1); padding: 20px; border-radius: 12px; border: 1px dashed var(--primary); margin-top: 30px;">
-                <h3>🔒 18 autres clients détectés</h3>
-                <p style="font-size:0.9rem;">Pour débloquer les coordonnées complètes et les numéros directs des décideurs, activez votre licence Nexus.</p>
-                <button class="btn-unlock" onclick="alert('Redirection vers le paiement Moov/Airtel...')">ACTIVER MA LICENCE (PAIEMENT)</button>
+        
+        <div id="section-auth" style="display: block;">
+            <div class="card">
+                <h2>Créer votre compte</h2>
+                <p style="color:#888; font-size:0.9rem;">Accédez à la base de données clients IA mondiale.</p>
+                <input type="text" id="reg-name" placeholder="Nom complet">
+                <input type="email" id="reg-email" placeholder="Email professionnel">
+                <button class="btn" onclick="goToApp()">Créer mon compte gratuitement</button>
             </div>
         </div>
+
+        <div id="section-app">
+            <div class="limit-box" id="demo-msg">🎁 MODE DÉMO : Il vous reste 1 recherche gratuite.</div>
+            <div class="card">
+                <h3 id="welcome-msg">Bienvenue</h3>
+                <label>Quel business voulez-vous propulser ?</label>
+                <select id="biz-choice">
+                    <option value="shopify">E-commerce / Shopify</option>
+                    <option value="agent">Vente d'Agents IA</option>
+                    <option value="n8n">Automatisation n8n</option>
+                </select>
+                <button class="btn" onclick="runSearch()">Lancer l'Agent de Recherche</button>
+
+                <div id="results" style="display:none; margin-top:25px; text-align:left;">
+                    <div style="padding:10px; border-bottom:1px solid #333;">
+                        <strong style="color:var(--p)">Client Trouvé : Agence Immo Pro</strong><br>
+                        <span class="blur">Email: contact@immo-pro.com</span>
+                    </div>
+                    <button class="btn" style="margin-top:20px; background:#10b981;" onclick="goToPay()">DÉBLOQUER TOUS LES CONTACTS</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-pay">
+            <div class="card">
+                <h2 style="color:#10b981;">Abonnement Premium</h2>
+                <p>Votre essai gratuit est terminé. Choisissez votre forfait mensuel pour continuer à recevoir des clients.</p>
+                
+                <div style="text-align:left; background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:20px;">
+                    <p>✅ 500 Prospects / mois</p>
+                    <p>✅ Emails & Téléphones directs</p>
+                    <p>✅ Support IA 24/7</p>
+                    <h3 style="text-align:center; color:var(--p);">25,000 FCFA / mois</h3>
+                </div>
+
+                <p style="font-size:0.8rem; font-weight:bold;">PAYER PAR MOBILE MONEY :</p>
+                <p>🟠 Moov : +235 93643188</p>
+                <p>🔵 Airtel : +235 64107740</p>
+                
+                <button class="btn" onclick="alert('Envoyez la capture du paiement par WhatsApp pour activer votre mois.')">J'AI PAYÉ MON ABONNEMENT</button>
+                <button class="btn btn-free" onclick="location.reload()">Retour</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        function startScan() {
-            const biz = document.getElementById('bizType').value;
-            const loc = document.getElementById('location').value;
-            if(loc === "") { alert("Précisez une zone géographique !"); return; }
+        function goToApp() {
+            const name = document.getElementById('reg-name').value;
+            if(!name) return alert("Entrez votre nom");
+            document.getElementById('section-auth').style.display = 'none';
+            document.getElementById('section-app').style.display = 'block';
+            document.getElementById('welcome-msg').innerText = "Salut " + name + " !";
+            document.getElementById('user-tag').innerText = "Compte Démo";
+        }
 
-            document.getElementById('searchForm').style.display = 'none';
-            document.getElementById('scanSection').style.display = 'block';
+        function runSearch() {
+            document.getElementById('demo-msg').innerText = "⚠️ Limite atteinte. Passez au mode Premium.";
+            document.getElementById('demo-msg').style.background = "rgba(255,165,0,0.1)";
+            document.getElementById('demo-msg').style.borderColor = "orange";
+            document.getElementById('results').style.display = 'block';
+        }
 
-            const messages = [
-                "Scan des API LinkedIn...",
-                "Détection des boutiques Shopify vulnérables...",
-                "Analyse des manques d'automatisation...",
-                "Finalisation de la liste de prospects..."
-            ];
-
-            let i = 0;
-            const stepTime = setInterval(() => {
-                document.getElementById('scanMsg').innerText = messages[i];
-                i++;
-                if(i >= messages.length) {
-                    clearInterval(stepTime);
-                    document.getElementById('scanSection').style.display = 'none';
-                    document.getElementById('results').style.display = 'block';
-                }
-            }, 2000);
+        function goToPay() {
+            document.getElementById('section-app').style.display = 'none';
+            document.getElementById('section-pay').style.display = 'block';
         }
     </script>
 </body>
